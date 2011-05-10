@@ -124,13 +124,18 @@ struct usvec
     ushort operator[](int i) const { return v[i]; }
 };
 
-struct shaftbb
+// SYNTENSITY: Add this workaround for llvm/clang bug 9893
+struct workaround
 {
     union
     {
         ushort v[6];
         struct { usvec min, max; };
     };
+};
+
+struct shaftbb : workaround
+{
 
     shaftbb() {}
     shaftbb(const ivec &o, int size)
