@@ -2179,16 +2179,17 @@ template<class MDL> struct skelcommands : modelcommands<MDL, struct MDL::skelmes
     
     skelcommands()
     {
-        if(MDL::multiparted()) modelcommand(loadpart, "load", "ssf");
-        modelcommand(settag, "tag", "ssffffff");
-        modelcommand(setpitch, "pitch", "sffff");
-        modelcommand(setpitchtarget, "pitchtarget", "ssiff");
-        modelcommand(setpitchcorrect, "pitchcorrect", "ssfff");
+        // SYNTENSITY: add this-> to modelcommand for clang, see http://clang.llvm.org/compatibility.html#dep_lookup_bases
+        if(MDL::multiparted()) this->modelcommand(loadpart, "load", "ssf");
+        this->modelcommand(settag, "tag", "ssffffff");
+        this->modelcommand(setpitch, "pitch", "sffff");
+        this->modelcommand(setpitchtarget, "pitchtarget", "ssiff");
+        this->modelcommand(setpitchcorrect, "pitchcorrect", "ssfff");
         if(MDL::animated())
         {
-            modelcommand(setanim, "anim", "ssfi");
-            modelcommand(setanimpart, "animpart", "s");
-            modelcommand(setadjust, "adjust", "sffffff");
+            this->modelcommand(setanim, "anim", "ssfi");
+            this->modelcommand(setanimpart, "animpart", "s");
+            this->modelcommand(setadjust, "adjust", "sffffff");
         }
     }
 };

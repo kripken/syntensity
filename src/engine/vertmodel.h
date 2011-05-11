@@ -648,9 +648,10 @@ template<class MDL> struct vertcommands : modelcommands<MDL, struct MDL::vertmes
 
     vertcommands()
     {
-        if(MDL::multiparted()) modelcommand(loadpart, "load", "sf"); 
-        modelcommand(setpitch, "pitch", "ffff");
-        if(MDL::animated()) modelcommand(setanim, "anim", "siiff");
+        // SYNTENSITY: add this-> to modelcommand for clang, see http://clang.llvm.org/compatibility.html#dep_lookup_bases
+        if(MDL::multiparted()) this->modelcommand(loadpart, "load", "sf"); 
+        this->modelcommand(setpitch, "pitch", "ffff");
+        if(MDL::animated()) this->modelcommand(setanim, "anim", "siiff");
     }
 };
 
