@@ -2179,7 +2179,7 @@ template<class MDL> struct skelcommands : modelcommands<MDL, struct MDL::skelmes
     
     skelcommands()
     {
-        // SYNTENSITY: add this-> to modelcommand for clang, see http://clang.llvm.org/compatibility.html#dep_lookup_bases
+        // XXX SYNTENSITY: add this-> to modelcommand for clang, see http://clang.llvm.org/compatibility.html#dep_lookup_bases
         if(MDL::multiparted()) this->modelcommand(loadpart, "load", "ssf");
         this->modelcommand(settag, "tag", "ssffffff");
         this->modelcommand(setpitch, "pitch", "sffff");

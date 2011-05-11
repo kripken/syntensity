@@ -1391,7 +1391,7 @@ glmatrixf animmodel::matrixstack[64];
 template<class MDL> struct modelloader
 {
     static MDL *loading;
-    static string dir;
+    static char dir[MAXSTRLEN]; // XXX SYNTENSITY: hardcode |string| as workaround for clang bug XXX (TODO)
 
     static bool animated() { return true; }
     static bool multiparted() { return true; }
@@ -1399,7 +1399,7 @@ template<class MDL> struct modelloader
 };
 
 template<class MDL> MDL *modelloader<MDL>::loading = NULL;
-template<class MDL> string modelloader<MDL>::dir = "";
+template<class MDL> char modelloader<MDL>::dir[MAXSTRLEN] = ""; // XXX SYNTENSITY: hardcode |string| as workaround for clang bug XXX (TODO)
 
 template<class MDL, class MESH> struct modelcommands
 {
