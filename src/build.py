@@ -31,21 +31,25 @@ stage('C++ => LLVM binary')
 env = os.environ.copy()
 env['EMMAKEN_COMPILER'] = CLANG
 env['CC'] = env['CXX'] = env['RANLIB'] = env['AR'] = os.path.join(EMSCRIPTEN_ROOT, 'tools', 'emmaken.py')
-Popen(['make', '-j', '2'], env=env).communicate()
+Popen(['make', 'client', '-j', '2'], env=env).communicate()
 
 assert os.path.exists('sauer_client'), 'Failed to create client'
 
+stage('Link')
+
+Popen([LLVM_LINK, 'sauer_client', os.path.join('enet', '.libs', 'libenet.a'), '-o=client.o']).communicate()
+
 stage('LLVM binary => LL assembly')
 
-Popen([LLVM_DIS] + LLVM_DIS_OPTS + ['sauer_client', '-o=sauer_client.ll']).communicate()
+Popen([LLVM_DIS] + LLVM_DIS_OPTS + ['client.o', '-o=client.ll']).communicate()
 
-assert os.path.exists('sauer_client.ll'), 'Failed to create client assembly code'
+assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 
 stage('LL assembly => JS')
 
-Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'sauer_client.ll'], stdout=open('sauer_client.js', 'w'), stderr=STDOUT).communicate()
+Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll'], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
 
-assert os.path.exists('sauer_client.js'), 'Failed to create client script code'
+assert os.path.exists('client.js'), 'Failed to create client script code'
 
-print 'Results of emscripten appear in sauer_client.js (both code and errors, if any)'
+print 'Results of emscripten appear in client.js (both code and errors, if any)'
 

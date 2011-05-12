@@ -562,6 +562,10 @@ void sendserverinforeply(ucharbuf &p)
     enet_socket_send(pongsock, &pongaddr, &buf, 1);
 }
 
+// XXX SYNTENSITY: Replace FD_ZERO with non-asm verson
+#undef FD_ZERO
+#define FD_ZERO(fdsp) memset(fdsp, 0, sizeof(fd_set))
+
 void checkserversockets()        // reply all server info requests
 {
     static ENetSocketSet sockset;
