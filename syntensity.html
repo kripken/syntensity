@@ -4,10 +4,11 @@
     <script type="text/javascript">
       var Module = {
         noInitialRun: true, // XXX careful with ';' here!
+        arguments: ['-f4'] // Force GLSL (and shaderprecision 0)
       };
 
       print = function(text) {
-        document.getElementById('output').innerHTML += text.replace('\n', '<br>');
+        document.getElementById('output').innerHTML += text.replace('\n', '<br>').replace('\r', '<br>') + '<br>';
       }
     </script>
     <script src="src/client.js" type="text/javascript"></script>
@@ -24,9 +25,9 @@
         Module.run();
       }
     </script>
-  <body onload="xxxonLoad()">
+  <body onload="onLoad()">
     <center>
-      <canvas id="canvas" width="800" height="400"></canvas>
+      <canvas id="canvas" width="400" height="300"></canvas>
     </center>
     <div id="output"></div>
   </body>
