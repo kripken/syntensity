@@ -3,19 +3,32 @@
     <title>Syntensity/Sauerbraten</title>
     <script type="text/javascript">
       var Module = {
-        noInitialRun: true;
+        noInitialRun: true, // XXX careful with ';' here!
       };
+
+      print = function(text) {
+        document.getElementById('output').innerHTML += text.replace('\n', '<br>');
+      }
     </script>
     <script src="src/client.js" type="text/javascript"></script>
     <script type="text/javascript">
       function onLoad() {
-        // Pass canvas to the generated code, and do the actual run() here
+        // Pass canvas and context to the generated code, and do the actual run() here
         Module.canvas = document.getElementById("canvas");
+        Module.contextGL = Module.canvas.getContext("webgl") ||
+                           Module.canvas.getContext("experimental-webgl");
+        if (!Module.contextGL) {
+          alert('WebGL not available :(');
+          return;
+        }
         Module.run();
       }
     </script>
-  <body onload="onLoad()">
-    <canvas id="canvas" width="600" height="500"></canvas>
+  <body onload="xxxonLoad()">
+    <center>
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </center>
+    <div id="output"></div>
   </body>
 </html>
 
