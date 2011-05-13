@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>Syntensity/Sauerbraten</title>
+    <script type="text/javascript">
+      var Module = {
+        noInitialRun: true;
+      };
+    </script>
+    <script src="src/client.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      function onLoad() {
+        // Pass canvas to the generated code, and do the actual run() here
+        Module.canvas = document.getElementById("canvas");
+        Module.run();
+      }
+    </script>
+  <body onload="onLoad()">
+    <canvas id="canvas" width="600" height="500"></canvas>
+  </body>
+</html>
+
