@@ -45,6 +45,10 @@ Popen([LLVM_DIS] + LLVM_DIS_OPTS + ['client.o', '-o=client.ll']).communicate()
 
 assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 
+# XXX Only saves 1%, and causes a failure later, so disabling
+#stage('Dead function elimination')
+#Popen([os.path.join(EMSCRIPTEN_ROOT, 'tools', 'dead_function_eliminator.py'), 'client.ll', 'client.dfe.ll']).communicate()
+
 stage('LL assembly => JS')
 
 Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll'], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()

@@ -16,9 +16,9 @@
       function onLoad() {
         // Pass canvas and context to the generated code, and do the actual run() here
         Module.canvas = document.getElementById('canvas');
-        Module.contextGL = Module.canvas.getContext('webgl') ||
-                           Module.canvas.getContext('experimental-webgl');
-        if (!Module.contextGL) {
+        Module.ctxGL = Module.canvas.getContext('webgl') ||
+                       Module.canvas.getContext('experimental-webgl');
+        if (!Module.ctxGL) {
           alert('WebGL not available :(');
           return;
         }
