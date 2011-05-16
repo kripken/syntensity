@@ -49,9 +49,12 @@ assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 #stage('Dead function elimination')
 #Popen([os.path.join(EMSCRIPTEN_ROOT, 'tools', 'dead_function_eliminator.py'), 'client.ll', 'client.dfe.ll']).communicate()
 
-stage('LL assembly => JS')
+stage('Emscripten: LL assembly => JS')
 
-Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll'], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
+settings = {
+  'SAFE_HEAP': 1
+}
+Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll', str(settings).replace("'", '"')], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
 
 assert os.path.exists('client.js'), 'Failed to create client script code'
 
