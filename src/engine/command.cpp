@@ -317,9 +317,12 @@ COMMAND(resetvar, "s");
 
 static inline void setalias(ident &id, tagval &v)
 {
+printf("zz setalias: %s|%d\n", id.name, id.type);
     if(id.valtype == VAL_STR) delete[] id.val.s;
     id.setval(v);
+printf("zz setalias 1: %s|%d\n", id.name, id.type);
     freecode(id);
+printf("zz setalias 2: %s|%d\n", id.name, id.type);
     id.flags = (id.flags & identflags) | identflags;
 }
 

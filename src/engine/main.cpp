@@ -1065,12 +1065,6 @@ int main(int argc, char **argv)
     ASSERT(dedicated <= 1);
     game::initclient();
 
-    // XXX
-    if(!execfile("data/stdlib.cfg", false)) fatal("cannot find data files (you are running from the wrong folder, try .bat file in the main folder)");   // this is the first file we load.
-    if(!execfile("data/font.cfg", false)) fatal("cannot find font definitions");
-    if(!setfont("default")) fatal("no default font specified");
-    // XXX
-
     logoutf("init: video: mode");
     const SDL_VideoInfo *video = SDL_GetVideoInfo();
     if(video) 
@@ -1094,7 +1088,9 @@ int main(int argc, char **argv)
 
     logoutf("init: console");
     identflags &= ~IDF_PERSIST;
-    // XXX SYNTENSITY: Return the font loading code to here!
+    if(!execfile("data/stdlib.cfg", false)) fatal("cannot find data files (you are running from the wrong folder, try .bat file in the main folder)");   // this is the first file we load.
+    if(!execfile("data/font.cfg", false)) fatal("cannot find font definitions");
+    if(!setfont("default")) fatal("no default font specified");
 
     inbetweenframes = true;
     renderbackground("initializing...");
