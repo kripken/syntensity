@@ -317,12 +317,9 @@ COMMAND(resetvar, "s");
 
 static inline void setalias(ident &id, tagval &v)
 {
-printf("zz setalias: %s|%d\n", id.name, id.type);
     if(id.valtype == VAL_STR) delete[] id.val.s;
     id.setval(v);
-printf("zz setalias 1: %s|%d\n", id.name, id.type);
     freecode(id);
-printf("zz setalias 2: %s|%d\n", id.name, id.type);
     id.flags = (id.flags & identflags) | identflags;
 }
 
@@ -713,10 +710,11 @@ static inline void compilestr(vector<uint> &code, const char *word, int len, boo
         return;
     }
     code.add((macro ? CODE_MACRO : CODE_VAL|RET_STR)|(len<<8));
-#if SYNTENSITY // Encode strings as uints, not chars
-    code.reserve(len);
-    for (int i = 0; i < len; i++)
-      code.add(word[i]);
+#if SYNTENSITY // avoid bitops
+    char *buf = (char*)code.reserve(len/sizeof(uint)+1).buf;
+    memcpy(buf, word, len);
+    memset(buf+len, 0, sizeof(uint)-len%sizeof(uint));
+    code.advance(len/sizeof(uint)+1);
 #else
     code.put((uint *)word, len/sizeof(uint));
     size_t endlen = len%sizeof(uint);
@@ -867,21 +865,12 @@ static bool compileblockstr(vector<uint> &code, const char *str, const char *end
 {
     int start = code.length();
     code.add(macro ? CODE_MACRO : CODE_VAL|RET_STR); 
-#if SYNTENSITY // Encode strings as uints, not chars
-    uint *buf = code.reserve(end-str+1).buf;
-#else
     char *buf = (char *)code.reserve((end-str)/sizeof(uint)+1).buf;
-#endif
     int len = 0;
     while(str < end)
     {
         int n = strcspn(str, "\r/\"@]\0");
-#if SYNTENSITY
-        for (int i = 0; i < n; i++)
-          buf[len+i] = str[i];
-#else
         memcpy(&buf[len], str, n);
-#endif
         len += n;
         str += n;
         switch(*str)
@@ -892,12 +881,7 @@ static bool compileblockstr(vector<uint> &code, const char *str, const char *end
                 const char *start = str; 
                 str = parsestring(str+1);
                 if(*str=='\"') str++;
-#if SYNTENSITY
-                for (int i = 0; i < str-start; i++)
-                  buf[len+i] = start[i];
-#else
                 memcpy(&buf[len], start, str-start);
-#endif
                 len += str-start;
                 break;
             }
@@ -912,15 +896,8 @@ static bool compileblockstr(vector<uint> &code, const char *str, const char *end
         }
     }
 done:
-#if SYNTENSITY
-#else
     memset(&buf[len], '\0', sizeof(uint)-len%sizeof(uint));
-#endif
-#if SYNTENSITY
-    code.advance(len+1);
-#else
     code.advance(len/sizeof(uint)+1);
-#endif
     code[start] |= len<<8;
     return true;
 }
@@ -1333,14 +1310,7 @@ static const uint *runcode(const uint *code, tagval &result)
             case CODE_VAL|RET_STR:
             {
                 uint len = op>>8;
-#if SYNTENSITY // Convert uint32 string to normal one
-                char temp[len+1];
-                for (int i = 0; i < len; i++)
-                  temp[i] = code[i];
-                args[numargs++].setstr(newstring(temp, len));
-#else
                 args[numargs++].setstr(newstring((char *)code, len));
-#endif
                 code += len/sizeof(uint) + 1;
                 continue;
             }
