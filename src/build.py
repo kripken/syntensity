@@ -52,7 +52,8 @@ assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 stage('Emscripten: LL assembly => JS')
 
 settings = {
-  'SAFE_HEAP': 1
+  'SAFE_HEAP': 2,
+  'SAFE_HEAP_LINES': ['tools.h:364'] # execute() on vectors of i32 can contain i8's as strings. Need to fix this for q1 opt
 }
 Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll', str(settings).replace("'", '"')], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
 
