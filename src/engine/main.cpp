@@ -2,6 +2,9 @@
 
 #include "engine.h"
 
+void run_main_loop();
+void main_loop();
+
 extern void cleargamma();
 
 void cleanup()
@@ -1065,6 +1068,7 @@ int main(int argc, char **argv)
     ASSERT(dedicated <= 1);
     game::initclient();
 
+#if !SYNTENSITY
     logoutf("init: video: mode");
     const SDL_VideoInfo *video = SDL_GetVideoInfo();
     if(video) 
@@ -1085,6 +1089,7 @@ int main(int argc, char **argv)
     gl_init(scr_w, scr_h, usedcolorbits, useddepthbits, usedfsaa);
     notexture = textureload("packages/textures/notexture.png");
     if(!notexture) fatal("could not find core textures");
+#endif
 
     logoutf("init: console");
     identflags &= ~IDF_PERSIST;
@@ -1095,10 +1100,12 @@ int main(int argc, char **argv)
     inbetweenframes = true;
     renderbackground("initializing...");
 
+#if !SYNTENSITY
     logoutf("init: gl: effects");
     loadshaders();
     particleinit();
     initdecals();
+#endif
 
     logoutf("init: world");
     camera1 = player = game::iterdynents(0);
@@ -1157,7 +1164,15 @@ int main(int argc, char **argv)
 
     inputgrab(grabinput = true);
 
+    run_main_loop();
+}
+
+void run_main_loop() {
     for(;;)
+        main_loop();
+}
+
+void main_loop() {
     {
         static int frames = 0;
         int millis = getclockmillis();
@@ -1191,10 +1206,12 @@ int main(int argc, char **argv)
 
         // miscellaneous general game effects
         recomputecamera();
+#if !SYNTENSITY
         updateparticles();
+#endif
         updatesounds();
 
-        if(minimized) continue;
+        if(minimized) return;
 
         inbetweenframes = false;
         if(mainmenu) gl_drawmainmenu(screen->w, screen->h);
@@ -1202,11 +1219,5 @@ int main(int argc, char **argv)
         swapbuffers();
         renderedframe = inbetweenframes = true;
     }
-    
-    ASSERT(0);   
-    return EXIT_FAILURE;
-
-    #if defined(WIN32) && !defined(_DEBUG) && !defined(__GNUC__)
-    } __except(stackdumper(0, GetExceptionInformation()), EXCEPTION_CONTINUE_SEARCH) { return 0; }
-    #endif
 }
+

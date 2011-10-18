@@ -1,4 +1,4 @@
-CXXFLAGS= -O3 -fomit-frame-pointer -g -DSYNTENSITY # XXX SYNTENSITY: Added -g, temporarily. Added -DSYNTENSITY
+CXXFLAGS= -O3 -fomit-frame-pointer #-g -DSYNTENSITY # XXX SYNTENSITY: Added -g, temporarily. Added -DSYNTENSITY
 override CXXFLAGS+= -Wall -fsigned-char -fno-exceptions -fno-rtti
 
 PLATFORM= $(shell uname -s)
