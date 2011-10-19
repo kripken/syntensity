@@ -530,6 +530,7 @@ struct editor
 
     void draw(int x, int y, int color, bool hit)
     {
+#if !SYNTENSITY
         int maxwidth = linewrap?pixelwidth:-1;
         
         int sx, sy, ex, ey;
@@ -633,6 +634,9 @@ struct editor
             }
             h+=height;
         }
+#else
+        printf("zz draw in textedit!\n");
+#endif
     }
 };
 

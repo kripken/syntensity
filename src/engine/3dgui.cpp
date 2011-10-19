@@ -380,6 +380,7 @@ struct gui : g3d_gui
             
             e->draw(curx+FONTW/2, cury, color, hit && editing);
             
+#if !SYNTENSITY
             lineshader->set();
             glDisable(GL_TEXTURE_2D);
             glDisable(GL_BLEND);
@@ -389,6 +390,9 @@ struct gui : g3d_gui
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
             defaultshader->set();
+#else
+            printf("zz 3dgui 1\n");
+#endif
         }
         layout(w, h);
         
@@ -409,6 +413,7 @@ struct gui : g3d_gui
 
     void rect_(float x, float y, float w, float h, int usetc = -1, bool lines = false) 
     {
+#if !SYNTENSITY
         glBegin(lines ? GL_LINE_LOOP : GL_TRIANGLE_STRIP);
         static const GLfloat tc[4][2] = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
         if(usetc>=0) glTexCoord2fv(tc[usetc]); 
@@ -429,7 +434,9 @@ struct gui : g3d_gui
         }
         glEnd();
         xtraverts += 4;
-        
+#else
+        printf("zz 3dgui 2\n");
+#endif        
     }
 
     void text_(const char *text, int x, int y, int color, bool shadow) 
@@ -440,6 +447,7 @@ struct gui : g3d_gui
 
     void background(int color, int inheritw, int inherith)
     {
+#if !SYNTENSITY
         if(layoutpass) return;
         glDisable(GL_TEXTURE_2D);
         notextureshader->set();
@@ -468,10 +476,14 @@ struct gui : g3d_gui
         rect_(curx, cury, w, h);
         glEnable(GL_TEXTURE_2D);
         defaultshader->set();
+#else
+        printf("zz 3dgui 3\n");
+#endif
     }
 
     void icon_(Texture *t, bool overlaid, int x, int y, int size, bool hit)
     {
+#if !SYNTENSITY
         float scale = float(size)/max(t->xs, t->ys); //scale and preserve aspect ratio
         float xs = t->xs*scale, ys = t->ys*scale;
         x += int((size-xs)/2);
@@ -503,10 +515,14 @@ struct gui : g3d_gui
             glColor3fv(light.v);
             rect_(x, y, xs, ys, 0);
         }
+#else
+        printf("zz 3dgui 4\n");
+#endif
     }        
 
     void previewslot(VSlot &vslot, bool overlaid, int x, int y, int size, bool hit)
     {
+#if !SYNTENSITY
         Slot &slot = *vslot.slot;
         if(slot.sts.empty()) return;
         VSlot *layer = NULL;
@@ -591,10 +607,14 @@ struct gui : g3d_gui
             glColor3fv(light.v);
             rect_(x, y, xs, ys, 0);
         }
+#else
+        printf("zz 3dgui 5\n");
+#endif
     }
 
     void line_(int size, float percent = 1.0f)
     {		
+#if !SYNTENSITY
         if(visible())
         {
             if(!slidertex) slidertex = textureload("data/guislider.png", 3);
@@ -615,6 +635,9 @@ struct gui : g3d_gui
                 rect_(curx, cury + FONTH/2 - size, xsize*percent, size*2, 1);
         }
         layout(ishorizontal() ? FONTH : 0, ishorizontal() ? 0 : FONTH);
+#else
+        printf("zz 3dgui 6\n");
+#endif
     }
 
     void textbox(const char *text, int width, int height, int color) 
@@ -665,6 +688,7 @@ struct gui : g3d_gui
 
     static void drawskin(int x, int y, int gapw, int gaph, int start, int n, int passes = 1, const vec &light = vec(1, 1, 1), float alpha = 0.80f)//int vleft, int vright, int vtop, int vbottom, int start, int n) 
     {
+#if !SYNTENSITY
         if(!skintex) skintex = textureload("data/guiskin.png", 3);
         glBindTexture(GL_TEXTURE_2D, skintex->id);
         int gapx1 = INT_MAX, gapy1 = INT_MAX, gapx2 = INT_MAX, gapy2 = INT_MAX;
@@ -741,6 +765,9 @@ struct gui : g3d_gui
             else break; //if it didn't happen on the first pass, it won't happen on the second..
         }
         if(passes>1) glDepthFunc(GL_ALWAYS);
+#else
+        printf("zz 3dgui 7\n");
+#endif
     } 
 
     vec origin, scale, *savedorigin;
@@ -768,6 +795,7 @@ struct gui : g3d_gui
 
     void start(int starttime, float initscale, int *tab, bool allowinput)
     {	
+#if !SYNTENSITY
         if(gui2d) 
         {
             initscale *= 0.025f; 
@@ -816,10 +844,14 @@ struct gui : g3d_gui
             drawskin(curx-skinx[2]*SKIN_SCALE, cury-skiny[6]*SKIN_SCALE, xsize, ysize, 0, 9, gui2d ? 1 : 2, light, alpha);
             if(!tcurrent) drawskin(curx-skinx[5]*SKIN_SCALE, cury-skiny[6]*SKIN_SCALE, xsize, 0, 9, 1, gui2d ? 1 : 2, light, alpha);
         }
+#else
+        printf("zz 3dgui 8\n");
+#endif
     }
 
     void end()
     {
+#if !SYNTENSITY
         if(layoutpass)
         {	
             xsize = max(tx, xsize);
@@ -861,6 +893,9 @@ struct gui : g3d_gui
             glPopMatrix();
         }
         poplist();
+#else
+        printf("zz 3dgui 9\n");
+#endif
     }
 };
 
@@ -1108,25 +1143,32 @@ void g3d_render()
 
     if(guis2d.length() || guis3d.length())
     {
+#if !SYNTENSITY
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
     }
 
     if(guis3d.length())
     {
+#if !SYNTENSITY
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_ALWAYS);
         glDepthMask(GL_FALSE);
+#endif
 
         loopvrev(guis3d) guis3d[i].cb->gui(guis3d[i], false);
 
+#if !SYNTENSITY
         glDepthFunc(GL_LESS);
         glDepthMask(GL_TRUE);
         glDisable(GL_DEPTH_TEST);
+#endif
     }
 
     if(guis2d.length())
     {
+#if !SYNTENSITY
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
@@ -1135,18 +1177,23 @@ void g3d_render()
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
+#endif
 
         loopvrev(guis2d) guis2d[i].cb->gui(guis2d[i], false);
 
+#if !SYNTENSITY
         glMatrixMode(GL_PROJECTION);
         glPopMatrix();
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
+#endif
     }
 
     if(guis2d.length() || guis3d.length())
     {
+#if !SYNTENSITY
         glDisable(GL_BLEND);
+#endif
     }
 
     flusheditors();
@@ -1162,6 +1209,7 @@ void g3d_render()
 
 void consolebox(int x1, int y1, int x2, int y2)
 {
+#if !SYNTENSITY
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
     glTranslatef(x1, y1, 0);
@@ -1174,5 +1222,6 @@ void consolebox(int x1, int y1, int x2, int y2)
     gui::drawskin(-gui::skinx[1]*SKIN_SCALE, -gui::skiny[4]*SKIN_SCALE, int(bw), int(bh), 0, 9, 1, vec(1, 1, 1), 0.60f);
     gui::drawskin((-gui::skinx[1] + gui::skinx[2] - gui::skinx[5])*SKIN_SCALE, -gui::skiny[4]*SKIN_SCALE, int(bw), 0, 9, 1, 1, vec(1, 1, 1), 0.60f);
     glPopMatrix();
+#endif
 }
 
