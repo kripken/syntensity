@@ -1,3 +1,5 @@
+#if !SYNTENSITY
+
 // GL_ARB_vertex_program, GL_ARB_fragment_program
 extern PFNGLGENPROGRAMSARBPROC              glGenPrograms_;
 extern PFNGLDELETEPROGRAMSARBPROC           glDeletePrograms_;
@@ -337,6 +339,8 @@ struct Shader
         name##shader->set(); \
     } while(0)
 
+#endif
+
 struct ImageData
 {
     int w, h, bpp, levels, align, pitch;
@@ -478,13 +482,19 @@ enum
     VSLOT_COLOR,
     VSLOT_NUM 
 };
-   
+
+#if SYNTENSITY
+struct Slot;
+#endif
+
 struct VSlot
 {
     Slot *slot;
     VSlot *next;
     int index, changed;
+#if !SYNTENSITY
     vector<ShaderParam> params;
+#endif
     bool linked;
     float scale;
     int rotation, xoffset, yoffset;
@@ -507,7 +517,9 @@ struct VSlot
 
     void reset()
     {
+#if !SYNTENSITY
         params.shrink(0);
+#endif
         linked = false;
         scale = 1;
         rotation = xoffset = yoffset = 0;
@@ -540,8 +552,10 @@ struct Slot
 
     int index;
     vector<Tex> sts;
+#if !SYNTENSITY
     Shader *shader;
     vector<ShaderParam> params;
+#endif
     VSlot *variants;
     bool loaded;
     uint texmask;
@@ -558,8 +572,10 @@ struct Slot
     void reset()
     {
         sts.shrink(0);
+#if !SYNTENSITY
         shader = NULL;
         params.shrink(0);
+#endif
         loaded = false;
         texmask = 0;
         DELETEA(autograss);
@@ -623,11 +639,13 @@ struct cubemapside
 
 extern cubemapside cubemapsides[6];
 extern Texture *notexture;
+#if !SYNTENSITY
 extern Shader *defaultshader, *rectshader, *cubemapshader, *notextureshader, *nocolorshader, *foggedshader, *foggednotextureshader, *stdworldshader, *lineshader, *foggedlineshader;
 extern int reservevpparams, maxvpenvparams, maxvplocalparams, maxfpenvparams, maxfplocalparams, maxvsuniforms, maxfsuniforms;
 
 extern Shader *lookupshaderbyname(const char *name);
 extern Shader *useshaderbyname(const char *name);
+#endif
 extern Texture *loadthumbnail(Slot &slot);
 extern void resetslotshader();
 extern void setslotshader(Slot &s);
@@ -641,9 +659,11 @@ extern void flushenvparamfv(const char *name, int type, int index, const float *
 extern void setlocalparamf(const char *name, int type, int index, float x = 0, float y = 0, float z = 0, float w = 0);
 extern void setlocalparamfv(const char *name, int type, int index, const float *v);
 extern void invalidateenvparams(int type, int start, int count);
+#if !SYNTENSITY
 extern ShaderParam *findshaderparam(Slot &s, const char *name, int type, int index);
 extern ShaderParam *findshaderparam(VSlot &s, const char *name, int type, int index);
 extern const char *getshaderparamname(const char *name);
+#endif
 
 extern int maxtmus, nolights, nowater, nomasks;
 
@@ -660,7 +680,9 @@ extern void setuptmu(int n, const char *rgbfunc = NULL, const char *alphafunc = 
 #define MAXBLURRADIUS 7
 
 extern void setupblurkernel(int radius, float sigma, float *weights, float *offsets);
+#if !SYNTENSITY
 extern void setblurshader(int pass, int size, int radius, float *weights, float *offsets, GLenum target = GL_TEXTURE_2D);
+#endif
 
 extern void savepng(const char *filename, ImageData &image, bool flip = false);
 extern void savetga(const char *filename, ImageData &image, bool flip = false);

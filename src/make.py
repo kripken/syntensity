@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
-# SYNTENSITY: build runner. See README.markdown.
+'''
+SYNTENSITY: build runner. See README.markdown.
+
+Note: You should do make clean and make distclean in src/enet, if you built natively before.
+'''
 
 import os, sys
 from subprocess import Popen, PIPE, STDOUT
@@ -29,9 +33,9 @@ def stage(text):
 stage('C++ => LLVM binary')
 
 env = os.environ.copy()
-env['EMMAKEN_COMPILER'] = CLANG
+env['CXXFLAGS'] = '-g -DSYNTENSITY'
 env['CC'] = env['CXX'] = env['RANLIB'] = env['AR'] = os.path.join(EMSCRIPTEN_ROOT, 'tools', 'emmaken.py')
-Popen(['make', 'client', '-j', '2'], env=env).communicate()
+Popen(['make', 'client'], env=env).communicate()
 
 assert os.path.exists('sauer_client'), 'Failed to create client'
 
@@ -52,6 +56,7 @@ assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 stage('Emscripten: LL assembly => JS')
 
 settings = {
+  #'USE_TYPED_ARRAYS': 2,
   'SAFE_HEAP': 2,
   'SAFE_HEAP_LINES': ['tools.h:364'] # execute() on vectors of i32 can contain i8's as strings. Need to fix this for q1 opt
 }

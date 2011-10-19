@@ -22,7 +22,9 @@ struct model
     virtual bool envmapped() { return false; }
     virtual bool skeletal() const { return false; }
 
+#if !SYNTENSITY
     virtual void setshader(Shader *shader) {}
+#endif
     virtual void setenvmap(float envmapmin, float envmapmax, Texture *envmap) {}
     virtual void setspec(float spec) {}
     virtual void setambient(float ambient) {}

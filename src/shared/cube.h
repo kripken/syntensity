@@ -44,9 +44,18 @@
 #define GL_GLEXT_LEGACY
 #define __glext_h__
 #define NO_SDL_GLEXT
-#include <SDL_opengl.h>
-#undef __glext_h__
-#include "GL/glext.h"
+#if !SYNTENSITY
+  #include <SDL_opengl.h>
+  #undef __glext_h__
+  #include "GL/glext.h"
+#else
+typedef int GLuint;
+typedef int GLenum;
+#define GL_FALSE 0
+#define GL_TRUE 1
+#define GL_RGB 177
+#define GL_TEXTURE_2D 188
+#endif
 #endif
 
 #include <enet/enet.h>
