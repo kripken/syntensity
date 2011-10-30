@@ -151,7 +151,8 @@ void renderbackground(const char *caption, Texture *mapshot, const char *mapname
     if(!inbetweenframes && !force) return;
 
     stopsounds(); // stop sounds while loading
- 
+
+#if !SYNTENSITY 
     int w = screen->w, h = screen->h;
     getbackgroundres(w, h);
     gettextres(w, h);
@@ -320,6 +321,9 @@ void renderbackground(const char *caption, Texture *mapshot, const char *mapname
             if(mapinfo) backgroundmapinfo = newstring(mapinfo);
         }
     }
+#else
+    printf("background!\n");
+#endif
 }
 
 float loadprogress = 0;
@@ -330,6 +334,7 @@ void renderprogress(float bar, const char *text, GLuint tex, bool background)   
 
     clientkeepalive();      // make sure our connection doesn't time out while loading maps etc.
     
+#if !SYNTENSITY
     #ifdef __APPLE__
     interceptkey(SDLK_UNKNOWN); // keep the event queue awake to avoid 'beachball' cursor
     #endif
@@ -441,6 +446,9 @@ void renderprogress(float bar, const char *text, GLuint tex, bool background)   
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
     swapbuffers();
+#else
+    printf("progress!\n");
+#endif
 }
 
 void keyrepeat(bool on)
@@ -499,7 +507,9 @@ void screenres(int *w, int *h)
     screen = surf;
     scr_w = screen->w;
     scr_h = screen->h;
+#if !SYNTENSITY
     glViewport(0, 0, scr_w, scr_h);
+#endif
 #endif
 }
 

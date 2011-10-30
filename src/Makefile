@@ -40,10 +40,6 @@ CLIENT_OBJS= \
 	engine/command.o \
 	engine/console.o \
 	engine/cubeloader.o \
-	engine/decal.o \
-	engine/dynlight.o \
-	engine/grass.o \
-	engine/lightmap.o \
 	engine/main.o \
 	engine/material.o \
 	engine/menus.o \
@@ -55,17 +51,9 @@ CLIENT_OBJS= \
 	engine/physics.o \
 	engine/pvs.o \
 	engine/rendergl.o \
-	engine/rendermodel.o \
-	engine/renderparticles.o \
-	engine/rendersky.o \
-	engine/rendertext.o \
-	engine/renderva.o \
 	engine/server.o	\
 	engine/serverbrowser.o \
-	engine/shader.o \
-	engine/shadowmap.o \
 	engine/sound.o \
-	engine/texture.o \
 	engine/water.o \
 	engine/world.o \
 	engine/worldio.o \
@@ -83,6 +71,18 @@ CLIENT_OBJS= \
 
 #	XXX SYNTENSITY: removed
 # engine/glare.o \
+#	engine/rendermodel.o \
+#	engine/renderparticles.o \
+#	engine/rendersky.o \
+#	engine/rendertext.o \
+#	engine/renderva.o \
+#	engine/shader.o \
+#	engine/shadowmap.o \
+#	engine/texture.o \
+#	engine/decal.o \
+#	engine/dynlight.o \
+#	engine/grass.o \
+#	engine/lightmap.o \
 
 CLIENT_PCH= shared/cube.h.gch engine/engine.h.gch fpsgame/game.h.gch
 

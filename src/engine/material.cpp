@@ -72,6 +72,7 @@ struct QuadNode
     }
 };
 
+#if !SYNTENSITY
 void renderwaterfall(const materialsurface &m, Texture *tex, float scale, float offset, uchar mat, const vec *normal = NULL)
 {
     float xf = TEX_SCALE/(tex->xs*scale);
@@ -131,6 +132,7 @@ void drawmaterial(int orient, int x, int y, int z, int csize, int rsize, float o
         varray::attribv<3>(v.v);
     }
 }
+#endif
 
 struct material
 {
@@ -437,11 +439,15 @@ void setupmaterials(int start, int len)
     }
     if(hasmat&(1<<MAT_LAVA)) 
     {
+#if !SYNTENSITY
         useshaderbyname("lava");
         useshaderbyname("lavaglare");
+#endif
         lookupmaterialslot(MAT_LAVA);
     }
+#if !SYNTENSITY
     if(hasmat&(1<<MAT_GLASS)) useshaderbyname("glass");
+#endif
 }
 
 VARP(showmat, 0, 1, 1);
@@ -516,6 +522,7 @@ void sortmaterials(vector<materialsurface *> &vismats)
     vismats.sort(editmode && showmat && !envmapping ? editmatcmp : vismatcmp);
 }
 
+#if !SYNTENSITY
 void rendermatgrid(vector<materialsurface *> &vismats)
 {
     enablepolygonoffset(GL_POLYGON_OFFSET_LINE);
@@ -892,4 +899,5 @@ void rendermaterials()
         glEnable(GL_TEXTURE_2D);
     }
 }
+#endif
 
