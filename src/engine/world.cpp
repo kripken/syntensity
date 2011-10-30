@@ -530,6 +530,7 @@ void entdrag(const vec &ray)
 
 VAR(showentradius, 0, 1, 1);
 
+#if !SYNTENSITY
 void renderentring(const extentity &e, float radius, int axis)
 {
     if(radius <= 0) return;
@@ -707,6 +708,7 @@ void renderentselection(const vec &o, const vec &ray, bool entmoving)
         if(enthover>=0) entfocus(enthover, renderentradius(e, true));
     }
 }
+#endif // !SYNTENSITY
 
 bool enttoggle(int id)
 {

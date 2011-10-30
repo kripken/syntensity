@@ -410,6 +410,10 @@ VAR(dbgvars, 0, 0, 1);
 
 void savevslot(stream *f, VSlot &vs, int prev)
 {
+#if SYNTENSITY
+    f->putlil<int>(0); // XXX
+    f->putlil<int>(prev);
+#else
     f->putlil<int>(vs.changed);
     f->putlil<int>(prev);
     if(vs.changed & (1<<VSLOT_SHPARAM))
@@ -445,6 +449,7 @@ void savevslot(stream *f, VSlot &vs, int prev)
     {
         loopk(3) f->putlil<float>(vs.colorscale[k]);
     }
+#endif
 }
 
 void savevslots(stream *f, int numvslots)
@@ -479,6 +484,9 @@ void savevslots(stream *f, int numvslots)
             
 void loadvslot(stream *f, VSlot &vs, int changed)
 {
+#if SYNTENSITY
+    vs.changed = 0; // XXX
+#else
     vs.changed = changed;
     if(vs.changed & (1<<VSLOT_SHPARAM))
     {
@@ -520,6 +528,7 @@ void loadvslot(stream *f, VSlot &vs, int changed)
     {
         loopk(3) vs.colorscale[k] = f->getlil<float>();
     }
+#endif
 }
 
 void loadvslots(stream *f, int numvslots)

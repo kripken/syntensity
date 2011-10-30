@@ -2,6 +2,7 @@
 
 #include "engine.h"
 
+#if !SYNTENSITY
 bool hasVBO = false, hasDRE = false, hasOQ = false, hasTR = false, hasFBO = false, hasDS = false, hasTF = false, hasBE = false, hasBC = false, hasCM = false, hasNP2 = false, hasTC = false, hasTE = false, hasMT = false, hasD3 = false, hasAF = false, hasVP2 = false, hasVP3 = false, hasPP = false, hasMDA = false, hasTE3 = false, hasTE4 = false, hasVP = false, hasFP = false, hasGLSL = false, hasGM = false, hasNVFB = false, hasSGIDT = false, hasSGISH = false, hasDT = false, hasSH = false, hasNVPCF = false, hasRN = false, hasPBO = false, hasFBB = false, hasUBO = false, hasBUE = false, hasFC = false, hasTEX = false;
 int hasstencil = 0;
 
@@ -725,6 +726,7 @@ void cleanupgl()
 
 #define VARRAY_INTERNAL
 #include "varray.h"
+#endif // !SYNTENSITY
 
 VAR(wireframe, 0, 0, 1);
 
@@ -751,6 +753,7 @@ void findorientation()
 
 void transplayer()
 {
+#if !SYNTENSITY
     // move from RH to Z-up LH quake style worldspace
     glLoadMatrixf(viewmatrix.v);
 
@@ -759,6 +762,7 @@ void transplayer()
     glRotatef(camera1->yaw, 0, 0, -1);
 
     glTranslatef(-camera1->o.x, -camera1->o.y, -camera1->o.z);   
+#endif
 }
 
 float curfov = 100, curavatarfov = 65, fovy, aspect;
@@ -899,6 +903,7 @@ void recomputecamera()
     setviewcell(camera1->o);
 }
 
+#if !SYNTENSITY
 extern const glmatrixf viewmatrix(vec4(-1, 0, 0, 0), vec4(0, 0, 1, 0), vec4(0, -1, 0, 0));
 glmatrixf mvmatrix, projmatrix, mvpmatrix, invmvmatrix, invmvpmatrix;
 
@@ -2314,5 +2319,5 @@ void gl_drawhud(int w, int h)
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 }
-
+#endif // !SYNTENSITY
 

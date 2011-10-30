@@ -53,7 +53,6 @@ CLIENT_OBJS= \
 	engine/server.o	\
 	engine/serverbrowser.o \
 	engine/sound.o \
-	engine/water.o \
 	engine/world.o \
 	engine/worldio.o \
 	fpsgame/ai.o \
@@ -83,6 +82,7 @@ CLIENT_OBJS= \
 #	engine/grass.o \
 #	engine/lightmap.o \
 #	engine/movie.o \
+#	engine/water.o \
 
 CLIENT_PCH= shared/cube.h.gch engine/engine.h.gch fpsgame/game.h.gch
 
