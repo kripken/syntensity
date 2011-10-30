@@ -751,12 +751,14 @@ namespace recorder
     {
         if(file) return;
        
+#if !SYNTENSITY
         useshaderbyname("moviergb");
         useshaderbyname("movieyuv");
         useshaderbyname("moviey");
         useshaderbyname("movieu");
         useshaderbyname("moviev");
- 
+#endif
+
         int fps, bestdiff, worstdiff;
         getfps(fps, bestdiff, worstdiff);
         if(videofps > fps) conoutf(CON_WARN, "frame rate may be too low to capture at %d fps", videofps);
@@ -799,11 +801,13 @@ namespace recorder
     
     void cleanup()
     {
+#if !SYNTENSITY
         if(scalefb) { glDeleteFramebuffers_(1, &scalefb); scalefb = 0; }
         if(scaletex[0] || scaletex[1]) { glDeleteTextures(2, scaletex); memset(scaletex, 0, sizeof(scaletex)); }
         scalew = scaleh = 0;
         if(encodefb) { glDeleteFramebuffers_(1, &encodefb); encodefb = 0; }
         if(encoderb) { glDeleteRenderbuffers_(1, &encoderb); encoderb = 0; }
+#endif
     }
 
     void stop()
@@ -841,16 +845,19 @@ namespace recorder
   
     void drawquad(float tw, float th, float x, float y, float w, float h)
     {
+#if !SYNTENSITY
         glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0,  0);  glVertex2f(x,   y);
         glTexCoord2f(tw, 0);  glVertex2f(x+w, y);
         glTexCoord2f(0,  th); glVertex2f(x,   y+h);
         glTexCoord2f(tw, th); glVertex2f(x+w, y+h);
         glEnd();
+#endif
     }
 
     void readbuffer(videobuffer &m, uint nextframe)
     {
+#if !SYNTENSITY
         bool accelyuv = movieaccelyuv && renderpath!=R_FIXEDFUNCTION && !(m.w%8),
              usefbo = movieaccel && hasFBO && hasTR && file->videow <= (uint)screen->w && file->videoh <= (uint)screen->h && (accelyuv || file->videow < (uint)screen->w || file->videoh < (uint)screen->h);
         uint w = screen->w, h = screen->h;
@@ -961,6 +968,7 @@ namespace recorder
 
         }
         else glReadPixels(0, 0, m.w, m.h, GL_BGRA, GL_UNSIGNED_BYTE, m.video);
+#endif
     }
  
     bool readbuffer()
@@ -990,6 +998,7 @@ namespace recorder
 
     void drawhud()
     {
+#if !SYNTENSITY
         int w = screen->w, h = screen->h;
 
         gettextres(w, h);
@@ -1019,6 +1028,7 @@ namespace recorder
 
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_BLEND);
+#endif
     }
 
     void capture()

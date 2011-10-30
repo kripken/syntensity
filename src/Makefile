@@ -43,7 +43,6 @@ CLIENT_OBJS= \
 	engine/main.o \
 	engine/material.o \
 	engine/menus.o \
-	engine/movie.o \
 	engine/normal.o	\
 	engine/octa.o \
 	engine/octaedit.o \
@@ -83,6 +82,7 @@ CLIENT_OBJS= \
 #	engine/dynlight.o \
 #	engine/grass.o \
 #	engine/lightmap.o \
+#	engine/movie.o \
 
 CLIENT_PCH= shared/cube.h.gch engine/engine.h.gch fpsgame/game.h.gch
 

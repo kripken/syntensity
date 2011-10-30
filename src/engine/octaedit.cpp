@@ -2,6 +2,7 @@
 
 extern int outline;
 
+#if !SYNTENSITY // TODO: replace with webgl drawing
 void boxs(int orient, vec o, const vec &s)
 {
     int   d = dimension(orient),
@@ -58,6 +59,7 @@ void boxsgrid(int orient, vec o, vec s, int g)
     glEnd();
     xtraverts += 2*int(xs+ys);
 }
+#endif
 
 selinfo sel, lastsel;
 
@@ -282,6 +284,7 @@ VAR(passthroughcube, 0, 1, 1);
 
 void rendereditcursor()
 {
+#if !SYNTENSITY
     int d   = dimension(sel.orient),
         od  = dimension(orient),
         odc = dimcoord(orient);
@@ -463,6 +466,7 @@ void rendereditcursor()
     notextureshader->set();
 
     glDisable(GL_BLEND);
+#endif
 }
 
 void tryedit()
@@ -1706,6 +1710,7 @@ void vreset()
 }
 COMMAND(vreset, "");
 
+#if !SYNTENSITY
 void vshaderparam(const char *name, float *x, float *y, float *z, float *w)
 {
     if(noedit() || (nompedit && multiplayer())) return;
@@ -1719,6 +1724,7 @@ void vshaderparam(const char *name, float *x, float *y, float *z, float *w)
     mpeditvslot(ds, allfaces, sel, true);
 }
 COMMAND(vshaderparam, "sffff");
+#endif
  
 void mpedittex(int tex, int allfaces, selinfo &sel, bool local)
 {
@@ -2129,6 +2135,7 @@ COMMAND(showtexgui, "i");
 
 void rendertexturepanel(int w, int h)
 {
+#if !SYNTENSITY
     if((texpaneltimer -= curtime)>0 && editmode)
     {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -2215,4 +2222,5 @@ void rendertexturepanel(int w, int h)
 
         glPopMatrix();
     }
+#endif
 }
