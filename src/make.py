@@ -37,15 +37,15 @@ env['CXXFLAGS'] = '-g -DSYNTENSITY'
 env['CC'] = env['CXX'] = env['RANLIB'] = env['AR'] = os.path.join(EMSCRIPTEN_ROOT, 'tools', 'emmaken.py')
 Popen(['make', 'client'], env=env).communicate()
 
-assert os.path.exists('sauer_client'), 'Failed to create client'
+assert os.path.exists('sauer_client.bc'), 'Failed to create client'
 
 stage('Link')
 
-Popen([LLVM_LINK, 'sauer_client', os.path.join('enet', '.libs', 'libenet.a'), '-o=client.o']).communicate()
+Popen([LLVM_LINK, 'sauer_client.bc', os.path.join('enet', '.libs', 'libenet.a.bc'), '-o=client.bc']).communicate()
 
 stage('LLVM binary => LL assembly')
 
-Popen([LLVM_DIS] + LLVM_DIS_OPTS + ['client.o', '-o=client.ll']).communicate()
+Popen([LLVM_DIS] + LLVM_DIS_OPTS + ['client.bc', '-o=client.ll']).communicate()
 
 assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 
@@ -57,8 +57,8 @@ stage('Emscripten: LL assembly => JS')
 
 settings = {
   'USE_TYPED_ARRAYS': 2,
-  'SAFE_HEAP': 2,
-  'SAFE_HEAP_LINES': ['tools.h:364'] # execute() on vectors of i32 can contain i8's as strings. Need to fix this for q1 opt
+  #'SAFE_HEAP': 2,
+  #'SAFE_HEAP_LINES': ['tools.h:364'] # execute() on vectors of i32 can contain i8's as strings. Need to fix this for q1 opt
 }
 Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll', str(settings).replace("'", '"')], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
 
