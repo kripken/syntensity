@@ -683,6 +683,7 @@ namespace game
 
     void drawicon(int icon, float x, float y, float sz)
     {
+#if !SYNTENSITY
         settexture("packages/hud/items.png");
         glBegin(GL_TRIANGLE_STRIP);
         float tsz = 0.25f, tx = tsz*(icon%4), ty = tsz*(icon/4);
@@ -691,6 +692,7 @@ namespace game
         glTexCoord2f(tx,     ty+tsz); glVertex2f(x,    y+sz);
         glTexCoord2f(tx+tsz, ty+tsz); glVertex2f(x+sz, y+sz);
         glEnd();
+#endif
     }
 
     float abovegameplayhud(int w, int h)
@@ -744,6 +746,7 @@ namespace game
 
     void drawammohud(fpsent *d)
     {
+#if !SYNTENSITY
         float x = HICON_X + 2*HICON_STEP, y = HICON_Y, sz = HICON_SIZE;
         glPushMatrix();
         glScalef(1/3.2f, 1/3.2f, 1);
@@ -780,10 +783,12 @@ namespace game
             drawicon(HICON_FIST+gun, xcycle, ycycle, sz);
         }
         glPopMatrix();
+#endif
     }
 
     void drawhudicons(fpsent *d)
     {
+#if !SYNTENSITY
         glPushMatrix();
         glScalef(2, 2, 1);
 
@@ -804,10 +809,12 @@ namespace game
             if(d->quadmillis) drawicon(HICON_QUAD, HICON_X + 3*HICON_STEP, HICON_Y);
             if(ammohud) drawammohud(d);
         }
+#endif
     }
 
     void gameplayhud(int w, int h)
     {
+#if !SYNTENSITY
         glPushMatrix();
         glScalef(h/1800.0f, h/1800.0f, 1);
 
@@ -832,6 +839,7 @@ namespace game
         }
 
         glPopMatrix();
+#endif
     }
 
     int clipconsole(int w, int h)

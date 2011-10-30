@@ -482,6 +482,7 @@ struct ctfclientmode : clientmode
 
     void drawhud(fpsent *d, int w, int h)
     {
+#if !SYNTENSITY
         if(d->state == CS_ALIVE)
         {
             loopv(flags) if(flags[i].owner == d)
@@ -547,6 +548,7 @@ struct ctfclientmode : clientmode
                 glPopMatrix();
             }
         }
+#endif
     }
 
     void removeplayer(fpsent *d)

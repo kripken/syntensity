@@ -13,6 +13,7 @@ namespace game
 
     void drawminimap(fpsent *d, float x, float y, float s)
     {
+#if !SYNTENSITY
         vec pos = vec(d->o).sub(minimapcenter).mul(minimapscale).add(0.5f), dir;
         vecfromyawpitch(camera1->yaw, 0, 1, 0, dir);
         float scale = calcradarscale();
@@ -25,16 +26,19 @@ namespace game
             glVertex2f(x + 0.5f*s*(1.0f + v.x), y + 0.5f*s*(1.0f + v.y));
         }
         glEnd();
+#endif
     }
 
     void drawradar(float x, float y, float s)
     {
+#if !SYNTENSITY
         glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0.0f, 0.0f); glVertex2f(x,   y);
         glTexCoord2f(1.0f, 0.0f); glVertex2f(x+s, y);
         glTexCoord2f(0.0f, 1.0f); glVertex2f(x,   y+s);
         glTexCoord2f(1.0f, 1.0f); glVertex2f(x+s, y+s);
         glEnd();
+#endif
     }
 
     #include "capture.h"
