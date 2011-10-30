@@ -1081,13 +1081,17 @@ void resetmap()
 {
     clearoverrides();
     clearmapsounds();
+#if !SYNTENSITY
     cleanreflections();
     resetblendmap();
     resetlightmaps();
+#endif
     clearpvs();
+#if !SYNTENSITY
     clearslots();
     clearparticles();
     cleardecals();
+#endif
     clearsleep();
     cancelsel();
     pruneundos();
@@ -1133,7 +1137,9 @@ bool emptymap(int scale, bool force, const char *mname, bool usecfg)    // main 
         identflags &= ~IDF_OVERRIDDEN;
     }
 
+#if !SYNTENSITY
     clearlights();
+#endif
     allchanged(true);
 
     startmap(mname);

@@ -1,5 +1,9 @@
 #include "engine.h"
 
+#if SYNTENSITY
+bool setfont(const char *name) { return true; }
+#else
+
 static hashtable<const char *, font> fonts;
 static font *fontdef = NULL;
 
@@ -312,4 +316,5 @@ void reloadfonts()
         if(!reloadtexture(*f.tex)) fatal("failed to reload font texture");
     );
 }
+#endif
 

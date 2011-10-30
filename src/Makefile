@@ -55,6 +55,7 @@ CLIENT_OBJS= \
 	engine/sound.o \
 	engine/world.o \
 	engine/worldio.o \
+	engine/rendertext.o \
 	fpsgame/ai.o \
 	fpsgame/client.o \
 	fpsgame/entities.o \
