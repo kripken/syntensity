@@ -69,5 +69,17 @@ Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll'] + 
 
 assert os.path.exists('client.js'), 'Failed to create client script code'
 
+stage('Appending stuff')
+
+f = open('client.js', 'a')
+f.write('''
+  FS.createPath('/', 'data', true, true);
+  ['stdlib.cfg', 'font.cfg'].forEach(function(name) {
+    FS.createLazyFile('/data/', name, 'data/' + name, true, true);
+  });
+  FS.root.write = true;
+''')
+f.close()
+
 print 'Results of emscripten appear in client.js (both code and errors, if any)'
 
