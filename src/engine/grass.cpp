@@ -256,6 +256,7 @@ void generategrass()
 
 void rendergrass()
 {
+#if !SYNTENSITY
     if(!grass || !grassdist || grassgroups.empty() || dbggrass) return;
 
     glDisable(GL_CULL_FACE);
@@ -335,5 +336,6 @@ void rendergrass()
     glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);
     glEnable(GL_CULL_FACE);
+#endif
 }
 

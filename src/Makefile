@@ -42,7 +42,6 @@ CLIENT_OBJS= \
 	engine/cubeloader.o \
 	engine/decal.o \
 	engine/dynlight.o \
-	engine/glare.o \
 	engine/grass.o \
 	engine/lightmap.o \
 	engine/main.o \
@@ -81,6 +80,9 @@ CLIENT_OBJS= \
 	fpsgame/server.o \
 	fpsgame/waypoint.o \
 	fpsgame/weapon.o
+
+#	XXX SYNTENSITY: removed
+# engine/glare.o \
 
 CLIENT_PCH= shared/cube.h.gch engine/engine.h.gch fpsgame/game.h.gch
 
