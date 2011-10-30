@@ -8,6 +8,7 @@ struct vboinfo
     uchar *data;
 };
 
+#if !SYNTENSITY
 static inline uint hthash(GLuint key)
 {
     return key;
@@ -17,6 +18,7 @@ static inline bool htcmp(GLuint x, GLuint y)
 {
     return x==y;
 }
+#endif
 
 hashtable<GLuint, vboinfo> vbos;
 
@@ -37,6 +39,7 @@ static int vbosize[NUMVBO];
 
 void destroyvbo(GLuint vbo)
 {
+#if !SYNTENSITY
     vboinfo *exists = vbos.access(vbo);
     if(!exists) return;
     vboinfo &vbi = *exists;
@@ -48,10 +51,12 @@ void destroyvbo(GLuint vbo)
         else if(vbi.data) delete[] vbi.data;
         vbos.remove(vbo);
     }
+#endif
 }
 
 void genvbo(int type, void *buf, int len, vtxarray **vas, int numva)
 {
+#if !SYNTENSITY
     GLuint vbo;
     uchar *data = NULL;
     if(hasVBO)
@@ -95,10 +100,12 @@ void genvbo(int type, void *buf, int len, vtxarray **vas, int numva)
                 break;
         }
     }
+#endif
 }
 
 bool readva(vtxarray *va, ushort *&edata, uchar *&vdata)
 {
+#if !SYNTENSITY
     if(!va->vbuf || !va->ebuf) return false;
 
     edata = new ushort[3*va->tris];
@@ -121,6 +128,7 @@ bool readva(vtxarray *va, ushort *&edata, uchar *&vdata)
         memcpy(vdata, (uchar *)va->vdata + va->voffset*VTXSIZE, va->verts*VTXSIZE);
         return true;
     }
+#endif
 }
 
 void flushvbo(int type = -1)
@@ -273,6 +281,7 @@ struct vacollect : verthash
 
     void remapunlit(vector<sortkey> &remap)
     {
+#if !SYNTENSITY
         uint lastlmid[8] = { LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT }, 
              firstlmid[8] = { LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT, LMID_AMBIENT };
         int firstlit[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -362,6 +371,7 @@ struct vacollect : verthash
             sortval *dst = indices.access(sortkey(k.tex, t.unlit, k.dim, k.layer, k.envmap, k.alpha));
             if(dst) loopl(2) loopvj(t.tris[l]) dst->tris[l].add(t.tris[l][j]);
         }
+#endif
     }
                     
     void optimize()
@@ -399,6 +409,7 @@ struct vacollect : verthash
 
     static int texsort(const sortkey *x, const sortkey *y)
     {
+#if !SYNTENSITY
         if(x->alpha < y->alpha) return -1;
         if(x->alpha > y->alpha) return 1;
         if(x->layer < y->layer) return -1;
@@ -423,6 +434,7 @@ struct vacollect : verthash
         }
         if(x->tex < y->tex) return -1;
         else return 1;
+#endif
     }
 
 #define GENVERTS(type, ptr, body) do \
@@ -447,6 +459,7 @@ struct vacollect : verthash
 
     void setupdata(vtxarray *va)
     {
+#if !SYNTENSITY
         va->verts = verts.length();
         va->tris = worldtris/3;
         va->vbuf = 0;
@@ -556,6 +569,7 @@ struct vacollect : verthash
         }
 
         if(mapmodels.length()) va->mapmodels.put(mapmodels.getbuf(), mapmodels.length());
+#endif
     }
 
     bool emptyva()
@@ -1014,6 +1028,7 @@ void gencubeedges(cube *c = worldroot, int x = 0, int y = 0, int z = 0, int size
 
 void gencubeverts(cube &c, int x, int y, int z, int size, int csi, uchar &vismask, uchar &clipmask)
 {
+#if !SYNTENSITY
     c.visible = 0;
     int tj = c.ext ? c.ext->tjoints : -1, numblends = 0, vis;
     loopi(6) if((vis = visibletris(c, i, x, y, z, size)))
@@ -1054,6 +1069,7 @@ void gencubeverts(cube &c, int x, int y, int z, int size, int csi, uchar &vismas
         if(visibleface(c, i, x, y, z, size, MAT_AIR, MAT_NOCLIP, MATF_CLIP)) c.visible |= 1<<i;
         if(faceedges(c, i)==F_SOLID) clipmask |= 1<<i;
     }
+#endif
 }
 
 bool skyoccluded(cube &c, int orient)
@@ -1298,6 +1314,7 @@ static vector<mergedface> vamerges[13];
 
 int genmergedfaces(cube &c, const ivec &co, int size, int minlevel = -1)
 {
+#if !SYNTENSITY
     if(!c.ext || !c.ext->merges || isempty(c)) return 0;
     int tj = c.ext->tjoints, numblends = 0, used = 0;
     loopi(6) 
@@ -1350,6 +1367,7 @@ int genmergedfaces(cube &c, const ivec &co, int size, int minlevel = -1)
         }
     }
     return used;
+#endif
 }
 
 void findmergedfaces(cube &c, const ivec &co, int size, int csi, int minlevel)
