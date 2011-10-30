@@ -99,6 +99,7 @@ struct decalrenderer
 
     void fadedecal(decalinfo &d, uchar alpha)
     {
+#if !SYNTENSITY
         bvec color;
         if(flags&DF_OVERBRIGHT)
         {
@@ -130,6 +131,7 @@ struct decalrenderer
                 vert++;
             }
         }
+#endif
     }
 
     void clearfadeddecals()
@@ -204,6 +206,7 @@ struct decalrenderer
          
     static void setuprenderstate()
     {
+#if !SYNTENSITY
         enablepolygonoffset(GL_POLYGON_OFFSET_FILL);
 
         glDepthMask(GL_FALSE);
@@ -212,10 +215,12 @@ struct decalrenderer
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
+#endif
     }
 
     static void cleanuprenderstate()
     {
+#if !SYNTENSITY
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -224,10 +229,12 @@ struct decalrenderer
         glDisable(GL_BLEND);
 
         disablepolygonoffset(GL_POLYGON_OFFSET_FILL);
+#endif
     }
 
     void render()
     {
+#if !SYNTENSITY
         if(startvert==endvert) return;
 
         float oldfogc[4];
@@ -283,6 +290,7 @@ struct decalrenderer
 
         if(flags&(DF_ADD|DF_INVMOD|DF_OVERBRIGHT)) glFogfv(GL_FOG_COLOR, oldfogc);
         if(flags&(DF_OVERBRIGHT|DF_SATURATE) && hasTE) resettmu(0);
+#endif
     }
 
     decalinfo &newdecal()

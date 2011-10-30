@@ -455,6 +455,7 @@ struct blobrenderer
 
     static void setuprenderstate()
     {
+#if !SYNTENSITY
         foggedshader->set();
 
         enablepolygonoffset(GL_POLYGON_OFFSET_FILL);
@@ -466,10 +467,12 @@ struct blobrenderer
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
+#endif
     }
 
     static void cleanuprenderstate()
     {
+#if !SYNTENSITY
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -478,6 +481,7 @@ struct blobrenderer
         glDisable(GL_BLEND);
 
         disablepolygonoffset(GL_POLYGON_OFFSET_FILL);
+#endif
     }
 
     static int lastreset;
@@ -513,6 +517,7 @@ struct blobrenderer
 
     void renderblob(const vec &o, float radius, float fade)
     {
+#if !SYNTENSITY
         if(lastrender != this)
         {
             if(!lastrender) 
@@ -553,6 +558,7 @@ struct blobrenderer
             if(offset < endblob ? offset > startblob || startblob > endblob : offset > startblob) b = &blobs[offset];
             else break; 
         } while(b->millis < 0);
+#endif
     }
 };
 

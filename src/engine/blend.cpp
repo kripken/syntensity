@@ -479,11 +479,14 @@ struct BlendBrush
 
     void cleanup()
     {
+#if !SYNTENSITY
         if(tex) { glDeleteTextures(1, &tex); tex = 0; }
+#endif
     }
 
     void gentex()
     {
+#if !SYNTENSITY
         if(!tex) glGenTextures(1, &tex);
         uchar *buf = new uchar[2*(w+2)*(h+2)];
         memset(buf, 0, 2*(w+2));
@@ -503,6 +506,9 @@ struct BlendBrush
         memset(dst, 0, 2*(w+2));
         createtexture(tex, w+2, h+2, buf, 3, 1, GL_LUMINANCE_ALPHA);
         delete[] buf;
+#else
+        assert(0);
+#endif
     }
     
     void reorient(bool flipx, bool flipy, bool swapxy)

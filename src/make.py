@@ -56,7 +56,7 @@ assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 stage('Emscripten: LL assembly => JS')
 
 settings = {
-  #'USE_TYPED_ARRAYS': 2,
+  'USE_TYPED_ARRAYS': 2,
   'SAFE_HEAP': 2,
   'SAFE_HEAP_LINES': ['tools.h:364'] # execute() on vectors of i32 can contain i8's as strings. Need to fix this for q1 opt
 }

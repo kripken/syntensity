@@ -267,7 +267,7 @@ void inputcommand(char *init, char *action = NULL, char *prompt = NULL) // turns
 ICOMMAND(saycommand, "C", (char *init), inputcommand(init));
 COMMAND(inputcommand, "sss");
 
-#if !defined(WIN32) && !defined(__APPLE__)
+#if !defined(WIN32) && !defined(__APPLE__) && !defined(SYNTENSITY)
 #include <X11/Xlib.h>
 #include <SDL_syswm.h>
 #endif
@@ -285,6 +285,8 @@ void pasteconsole()
 	extern void mac_pasteconsole(char *commandbuf);
 
 	mac_pasteconsole(commandbuf);
+    #elif defined(SYNTENSITY)
+    printf("pastey?\n");
 	#else
     SDL_SysWMinfo wminfo;
     SDL_VERSION(&wminfo.version); 
