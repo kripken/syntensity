@@ -30,6 +30,8 @@ def stage(text):
   print '=' * len(text)
   print
 
+#'''
+
 stage('C++ => LLVM binary')
 
 env = os.environ.copy()
@@ -53,14 +55,17 @@ assert os.path.exists('client.ll'), 'Failed to create client assembly code'
 #stage('Dead function elimination')
 #Popen([os.path.join(EMSCRIPTEN_ROOT, 'tools', 'dead_function_eliminator.py'), 'client.ll', 'client.dfe.ll']).communicate()
 
+#'''
+
 stage('Emscripten: LL assembly => JS')
 
-settings = {
+EMSCRIPTEN_SETTINGS = {
   'USE_TYPED_ARRAYS': 2,
   #'SAFE_HEAP': 2,
   #'SAFE_HEAP_LINES': ['tools.h:364'] # execute() on vectors of i32 can contain i8's as strings. Need to fix this for q1 opt
 }
-Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll', str(settings).replace("'", '"')], stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
+settings = ['-s %s=%s' % (k, json.dumps(v)) for k, v in EMSCRIPTEN_SETTINGS.items()]
+Popen(['python', os.path.join(EMSCRIPTEN_ROOT, 'emscripten.py'), 'client.ll'] + settings, stdout=open('client.js', 'w'), stderr=STDOUT).communicate()
 
 assert os.path.exists('client.js'), 'Failed to create client script code'
 
