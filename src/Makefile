@@ -56,6 +56,7 @@ CLIENT_OBJS= \
 	engine/world.o \
 	engine/worldio.o \
 	engine/rendertext.o \
+	engine/shadowmap.o \
 	fpsgame/ai.o \
 	fpsgame/client.o \
 	fpsgame/entities.o \
@@ -76,7 +77,6 @@ CLIENT_OBJS= \
 #	engine/rendertext.o \
 #	engine/renderva.o \
 #	engine/shader.o \
-#	engine/shadowmap.o \
 #	engine/texture.o \
 #	engine/decal.o \
 #	engine/dynlight.o \

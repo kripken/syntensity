@@ -1,6 +1,7 @@
 #include "engine.h"
-#include "rendertarget.h"
 
+#if !SYNTENSITY
+#include "rendertarget.h"
 VARP(shadowmap, 0, 0, 1);
 
 extern void cleanshadowmap();
@@ -21,6 +22,8 @@ VARP(shadowmapintensity, 0, 40, 100);
 
 VARP(blurshadowmap, 0, 1, 3);
 VARP(blursmsigma, 1, 100, 200);
+
+#endif // !SYNTENSITY
 
 #define SHADOWSKEW 0.7071068f
 
@@ -82,6 +85,7 @@ void guessshadowdir()
     shadowdir = dir;
 }
 
+#if !SYNTENSITY
 bool shadowmapping = false;
 
 static glmatrixf shadowmapmatrix;
@@ -496,4 +500,5 @@ void viewshadowmap()
     if(!shadowmap) return;
     shadowmaptex.debug();
 }
+#endif // !SYNTENSITY
 

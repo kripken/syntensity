@@ -1744,9 +1744,13 @@ void allchanged(bool load)
 {
     renderprogress(0, "clearing vertex arrays...");
     clearvas(worldroot);
+#if !SYNTENSITY
     resetqueries();
+#endif
     resetclipplanes();
+#if !SYNTENSITY
     if(load) initenvmaps();
+#endif
     guessshadowdir();
     entitiesinoctanodes();
     tjoints.setsize(0);
@@ -1761,15 +1765,19 @@ void allchanged(bool load)
     octarender();
     if(load) precachetextures();
     setupmaterials();
+#if !SYNTENSITY
     invalidatepostfx();
+#endif
     updatevabbs(true);
     resetblobs();
+#if !SYNTENSITY
     if(load) 
     {
         seedparticles();
         genenvmaps();
         drawminimap();
     }
+#endif
 }
 
 void recalc()

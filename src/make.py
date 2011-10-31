@@ -34,6 +34,11 @@ def stage(text):
 
 stage('C++ => LLVM binary')
 
+try:
+  os.unlink('sauer_client.bc')
+except:
+  pass
+
 env = os.environ.copy()
 env['CXXFLAGS'] = '-g -DSYNTENSITY'
 env['CC'] = env['CXX'] = env['RANLIB'] = env['AR'] = os.path.join(EMSCRIPTEN_ROOT, 'tools', 'emmaken.py')
@@ -74,7 +79,7 @@ stage('Appending stuff')
 f = open('client.js', 'a')
 f.write('''
   FS.createPath('/', 'data', true, true);
-  ['stdlib.cfg', 'font.cfg'].forEach(function(name) {
+  ['stdlib.cfg', 'font.cfg', 'keymap.cfg', 'stdedit.cfg', 'menus.cfg', 'sounds.cfg', 'brush.cfg', 'defaults.cfg'].forEach(function(name) {
     FS.createLazyFile('/data/', name, 'data/' + name, true, true);
   });
   FS.root.write = true;
